@@ -19,6 +19,11 @@ public class DatabaseConverter {
     private ArrayList<NameContainer> database;
     private boolean ready;
     
+    /**
+     * Constructs a new DatabaseConverter, checking to see if the file provided exists.
+     * @param legacyDatabaseFilename The filepath to the legacy database.
+     * @throws IOException If the file does not exist.
+     */
     public DatabaseConverter(String legacyDatabaseFilename) throws IOException {
         ready = false;
         File file = new File(legacyDatabaseFilename);
@@ -27,6 +32,10 @@ public class DatabaseConverter {
         this.legacyDatabaseFilename = legacyDatabaseFilename;
     }
     
+    /**
+     * Prepares the database for conversion to JSON text. This must be run
+     * before calling toJSON(). 
+     */
     public void importDatabase() {
         try (
                 FileInputStream fileInputStream = new FileInputStream(legacyDatabaseFilename); 
@@ -40,6 +49,10 @@ public class DatabaseConverter {
         ready = true;
     }
     
+    /**
+     * Converts the legacy database into JSON format. Can only be run after
+     * importDatabase() is called. 
+     */
     public void toJSON() {
         if (!ready) {
             System.out.println("ERROR: Database not ready to be converted");

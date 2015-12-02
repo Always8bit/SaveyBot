@@ -46,7 +46,7 @@ public class XML {
     /** The Character '='. */
     public static final Character EQ    = '=';
 
-    /** The Character '>'. */
+    /** The Character '&lt;'. */
     public static final Character GT    = '>';
 
     /** The Character '&lt;'. */
@@ -64,10 +64,10 @@ public class XML {
     /**
      * Replace special characters with XML escapes:
      * <pre>
-     * &amp; <small>(ampersand)</small> is replaced by &amp;amp;
-     * &lt; <small>(less than)</small> is replaced by &amp;lt;
-     * &gt; <small>(greater than)</small> is replaced by &amp;gt;
-     * &quot; <small>(double quote)</small> is replaced by &amp;quot;
+     * &amp; <em>(ampersand)</em> is replaced by &amp;amp;
+     * &lt; <em>(less than)</em> is replaced by &amp;lt;
+     * &gt; <em>(greater than)</em> is replaced by &amp;gt;
+     * &quot; <em>(double quote)</em> is replaced by &amp;quot;
      * </pre>
      * @param string The string to be escaped.
      * @return The escaped string.
@@ -343,7 +343,7 @@ public class XML {
      * does not like to distinguish between elements and attributes.
      * Sequences of similar elements are represented as JSONArrays. Content
      * text may be placed in a "content" member. Comments, prologs, DTDs, and
-     * <code>&lt;[ [ ]]></code> are ignored.
+     * <code>&lt;[ [ ]]&lt;</code> are ignored.
      * @param string The source string.
      * @return A JSONObject containing the structured data from the XML string.
      * @throws JSONException

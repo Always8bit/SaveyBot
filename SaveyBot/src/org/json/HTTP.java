@@ -38,29 +38,7 @@ public class HTTP {
 
     /**
      * Convert an HTTP header string into a JSONObject. It can be a request
-     * header or a response header. A request header will contain
-     * <pre>{
-     *    Method: "POST" (for example),
-     *    "Request-URI": "/" (for example),
-     *    "HTTP-Version": "HTTP/1.1" (for example)
-     * }</pre>
-     * A response header will contain
-     * <pre>{
-     *    "HTTP-Version": "HTTP/1.1" (for example),
-     *    "Status-Code": "200" (for example),
-     *    "Reason-Phrase": "OK" (for example)
-     * }</pre>
-     * In addition, the other parameters in the header will be captured, using
-     * the HTTP field names as JSON names, so that <pre>
-     *    Date: Sun, 26 May 2002 18:06:04 GMT
-     *    Cookie: Q=q2=PPEAsg--; B=677gi6ouf29bn&b=2&f=s
-     *    Cache-Control: no-cache</pre>
-     * become
-     * <pre>{...
-     *    Date: "Sun, 26 May 2002 18:06:04 GMT",
-     *    Cookie: "Q=q2=PPEAsg--; B=677gi6ouf29bn&b=2&f=s",
-     *    "Cache-Control": "no-cache",
-     * ...}</pre>
+     * header or a response header. 
      * It does no further checking or conversion. It does not parse dates.
      * It does not do '%' transforms on URLs.
      * @param string An HTTP header string.
