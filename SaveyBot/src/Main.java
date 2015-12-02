@@ -1,4 +1,5 @@
 
+import info.savestate.saveybot.*;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -11,12 +12,17 @@ public class Main {
     /**
      * @param a The command line arguments.
      */
-    public static void main(String[] a) {
+    public static void main(String[] a) throws IOException {
+        String configPath = "saveybot.cfg";
         for (int i=0; i<a.length; i++) {
             // decode json 
             if (a[i].equals("--json"))
-                databaseToJSON(a[i+1]);
+                databaseToJSON(a[++i]);
+            if (a[i].equals("--config"))
+                configPath = a[++i];
         }
+        SaveyBot sb = new SaveyBot(configPath);
+        System.out.println(sb.getConfig().toString());
     }
     
     /**
