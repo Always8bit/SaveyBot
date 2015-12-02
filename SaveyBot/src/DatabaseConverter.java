@@ -1,10 +1,19 @@
-package database;
+
+// !!!!! READ THIS !!!!!
+// NETBEANS LIKES TO IGNORE LIBRARIES IN THE DEFAULT PACKAGE
+// So I had to copy NameContainer.class to the source folder as well as
+// import it as a library.
+
+// That is all. 
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  * A conversion utility for converting the old database type to JSON. 
@@ -18,6 +27,7 @@ public class DatabaseConverter {
     private String legacyDatabaseFilename;
     private ArrayList<NameContainer> database;
     private boolean ready;
+    private JSONArray databaseJSON;
     
     /**
      * Constructs a new DatabaseConverter, checking to see if the file provided exists.
@@ -25,6 +35,8 @@ public class DatabaseConverter {
      * @throws IOException If the file does not exist.
      */
     public DatabaseConverter(String legacyDatabaseFilename) throws IOException {
+        database     = null;
+        databaseJSON = null;
         ready = false;
         File file = new File(legacyDatabaseFilename);
         if(!(file.exists() && !file.isDirectory())) 
@@ -38,13 +50,16 @@ public class DatabaseConverter {
      */
     public void importDatabase() {
         try (
-                FileInputStream fileInputStream = new FileInputStream(legacyDatabaseFilename); 
-                ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)
+                FileInputStream fis = new FileInputStream(legacyDatabaseFilename); 
+                ObjectInputStream ois = new ObjectInputStream(fis)
             ) {
-            database = (ArrayList)objectInputStream.readObject();
+            database = (ArrayList)ois.readObject();
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("ERROR: Database not imported.");
-            System.out.println("Was the provided file a legacy database?");
+            System.out.println("       FILE: " + legacyDatabaseFilename);
+            System.out.println("       Was the provided file a legacy database?");
+            e.printStackTrace();
+            return;
         }
         ready = true;
     }
@@ -56,8 +71,23 @@ public class DatabaseConverter {
     public void toJSON() {
         if (!ready) {
             System.out.println("ERROR: Database not ready to be converted");
-            System.out.println("Did you importDatabase(); yet?");
+            System.out.println("       Did you importDatabase(); yet?");
             return;
         }
+        databaseJSON = new JSONArray();
+        for (NameContainer dbEntry : database) {
+            JSONObject jsonEntry = new JSONObject();
+            jsonEntry.put("slot", dbEntry.getSlot().toString().trim());
+            jsonEntry.put("name", dbEntry.getName().trim());
+            jsonEntry.put("message", dbEntry.getData().trim());
+            databaseJSON.put(jsonEntry);
+        }
+    }
+    
+    @Override
+    public String toString() {
+        if (databaseJSON == null)
+            return "Null JSON Database";
+        return databaseJSON.toString(1);
     }
 }
