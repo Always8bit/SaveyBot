@@ -6,7 +6,7 @@ import java.io.IOException;
  * The Main Class for SaveyBot.
  * @author Joseph El-Khouri
  */
-public class SaveyBot {
+public class Main {
 
     /**
      * @param a The command line arguments.
@@ -19,6 +19,11 @@ public class SaveyBot {
         }
     }
     
+    /**
+     * Converts an ArrayList&lt;NameContainer&gt; serialized object to JSON.
+     * Uses the DatabaseConverter along with a legacy class file called NameContainer.
+     * @param filepath The path to the legacy database file.
+     */
     public static void databaseToJSON(String filepath) {
         try {
             DatabaseConverter dbc = new DatabaseConverter(filepath);
