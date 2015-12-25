@@ -75,7 +75,28 @@ public class JSONFileManipulator {
         return "that savestate doesnt exist !!! (u should make it)";
     }
     
-    //public BigInteger lowestSlot() 
+    public String lowestSlot() {
+        BigInteger lowest = BigInteger.ZERO;
+        JSONArray json = getJSON();
+        boolean passed = false;
+        while (!passed) {
+            passed = true;
+            for (int i=0; i<json.length(); i++) {
+                JSONObject o = json.getJSONObject(i);
+                BigInteger current = o.getBigInteger("slot");
+                if (current.compareTo(lowest) == 0) {
+                    lowest = lowest.add(BigInteger.ONE);
+                    passed = false;
+                    break;
+                }
+            }
+        }
+        return lowest.toString();
+    }
+
+    public String saveSlot(String username, String message) {    
+        return saveSlot(lowestSlot(), username, message);
+    }
     
     public String saveSlot(String slotString, String username, String message) {
         BigInteger slot;

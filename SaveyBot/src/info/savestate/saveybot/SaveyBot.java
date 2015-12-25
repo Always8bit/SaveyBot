@@ -46,7 +46,7 @@ public class SaveyBot extends PircBot {
         
         String[] command = parseCommand(message);
         if (command != null) {
-            String parsed = CommandParse.parseCommand(command, verbose, jfm);
+            String parsed = CommandParse.parseCommand(command, verbose, jfm, sender);
             if (parsed != null) sendMessage(channel, "~ " + parsed);
         }
     }
