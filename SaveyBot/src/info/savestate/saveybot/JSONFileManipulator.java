@@ -11,7 +11,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.math.BigInteger;
 import java.nio.charset.Charset;
 import org.json.*;
@@ -43,8 +42,8 @@ public class JSONFileManipulator {
                 if (o.getString("name").equals(slotString)) entries++;
             } 
             if (entries > 0)
-                return "! :D " + slotString + " owns " + entries + " savestates!!!";
-            return "! )''': " + slotString + " doesnt own any savestates );";
+                return ":D " + slotString + " owns " + entries + " savestates!!!";
+            return ")''': " + slotString + " doesnt own any savestates );";
         }
         StringBuilder slots = new StringBuilder();
         int entries = 0;
