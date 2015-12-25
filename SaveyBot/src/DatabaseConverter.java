@@ -60,6 +60,7 @@ public class DatabaseConverter {
             System.out.println("       Was the provided file a legacy database?");
             e.printStackTrace();
             return;
+            
         }
         ready = true;
     }

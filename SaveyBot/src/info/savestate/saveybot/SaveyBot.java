@@ -8,7 +8,7 @@ import java.io.IOException;
  */
 public class SaveyBot {
     
-    private ConfigReader configuration;
+    private final ConfigReader configuration;
     
     public SaveyBot(String configPath) throws IOException {
         configuration = new ConfigReader(configPath);
