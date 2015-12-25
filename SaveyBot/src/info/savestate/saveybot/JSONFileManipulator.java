@@ -42,8 +42,8 @@ public class JSONFileManipulator {
                 if (o.getString("name").equals(slotString)) entries++;
             } 
             if (entries > 0)
-                return ":D " + slotString + " owns " + entries + " savestates!!!";
-            return ")''': " + slotString + " doesnt own any savestates );";
+                return slotString + " owns " + entries + " savestates!!! :D/";
+            return slotString + " doesnt own any savestates );";
         }
         StringBuilder slots = new StringBuilder();
         int entries = 0;
@@ -60,7 +60,7 @@ public class JSONFileManipulator {
             slots.deleteCharAt(slots.length()-1);
             return "owha! " + slotString + " owns slot(s) " + slots.toString() + "!!!! :D :D :D/";
         }
-        return ")); " + slotString + " doesn't own any saves (u should fix that !!)";
+        return slotString + " doesn't own any savestates!! (u should fix that !! O:)";
     }
 
     private String getSlot(BigInteger slot) {
@@ -72,9 +72,11 @@ public class JSONFileManipulator {
             if (current.equals(slot))
                 return o.getString("message");
         }
-        return "the savestate doesnt exist !!! (u should make it)";
+        return "that savestate doesnt exist !!! (u should make it)";
     }
-
+    
+    //public BigInteger lowestSlot() 
+    
     public String saveSlot(String slotString, String username, String message) {
         BigInteger slot;
         try {

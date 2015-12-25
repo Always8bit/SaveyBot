@@ -27,17 +27,7 @@ public class Main {
             if (a[i].equals("--db"))
                 dbPath = a[++i];
         }
-        SaveyBot sb = new SaveyBot(configPath);
-        JSONFileManipulator jfm = new JSONFileManipulator(dbPath);
-        System.out.println(jfm.getSlot("666", false));
-        System.out.println(jfm.getSlot("48257298572", false));
-        System.out.println(jfm.getSlot("Savestate", false));
-        System.out.println(jfm.getSlot("butts_wowowow", false));
-        System.out.println(jfm.getSlot("666", true));
-        System.out.println(jfm.getSlot("48257298572", true));
-        System.out.println(jfm.getSlot("butts_wowowow", true));
-        System.out.println(jfm.getSlot("Savestate", true));
-        
+        SaveyBot sb = new SaveyBot(configPath, dbPath);
     }
     
     /**
