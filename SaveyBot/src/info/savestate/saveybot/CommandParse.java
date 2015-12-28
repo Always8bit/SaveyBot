@@ -70,6 +70,11 @@ public class CommandParse {
             return "(2^32)^Integer.MAX_VALUE";
         }
         
+        if (invoke.equals("search")) {
+            if (command.length == 2)
+                return jfm.search(command[1]);
+        }
+        
         if (invoke.equals("road")) {
             if (command.length <= 1)
                 return jfm.randomLoad();

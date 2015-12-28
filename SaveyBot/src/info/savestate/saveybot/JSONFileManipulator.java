@@ -154,6 +154,19 @@ public class JSONFileManipulator {
         return "SaveyBot's lowest free slot is #" + lowestSlot() + "! wow !!! :D/";
     }
 
+    public String search(String term) {
+        JSONArray json = getJSON(); 
+        StringBuilder sb = new StringBuilder();
+        for (int i=0; i<json.length(); i++) {
+            JSONObject savestate = json.getJSONObject(i);
+            if (savestate.getString("message").toLowerCase().contains(term.trim().toLowerCase()))
+                sb.append(savestate.getString("slot")).append(", ");
+        }
+        if (sb.length() == 0)
+            return "no search resluts! )^:";
+        return term + ": " + sb.toString().substring(0, sb.toString().length()-2);
+    }
+            
     public String saveSlot(String username, String message) {    
         return saveSlot(lowestSlot(), username, message);
     }
