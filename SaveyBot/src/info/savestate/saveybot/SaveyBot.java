@@ -28,12 +28,9 @@ public class SaveyBot extends PircBot {
         for(String s : configuration.getParam("+CHAN")) {
             joinChannel(s);
         }
-        
-        /*
         for(String s : configuration.getParam("CHAN")) {
             joinChannel(s);
         }
-        */
     }
 
     @Override
