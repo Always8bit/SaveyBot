@@ -13,6 +13,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
 import org.json.*;
 
 /**
@@ -22,9 +25,11 @@ import org.json.*;
 public class JSONFileManipulator {
     
     private final String filename;
+    private final Random rand;
     
     public JSONFileManipulator(String filename) {
         this.filename = filename;
+        this.rand = new Random('d' + 'o' + 'n' + 'g');
     }
     
     public String getSlot(String slotString, boolean largeResponse) {
@@ -61,6 +66,34 @@ public class JSONFileManipulator {
             return "owha! " + slotString + " owns slot(s) " + slots.toString() + "!!!! :D :D :D/";
         }
         return slotString + " doesn't own any savestates!! (u should fix that !! O:)";
+    }
+    
+    public String markOf(String username) {
+        JSONArray json = getJSON();
+        ArrayList<String> words = new ArrayList<>();
+        if (username.isEmpty()) {
+            for (int i=0; i<json.length(); i++) {
+                String[] splitMessage = json.getJSONObject(i).getString("message").split("\\s+");
+                words.addAll(Arrays.asList(splitMessage));
+            }
+            StringBuilder sb = new StringBuilder();
+            for (int i=0; i<6; i++) /**/ sb.append(words.get(rand.nextInt(words.size()))).append(' ');
+            return sb.toString().trim();
+        }
+        for (int i=0; i<json.length(); i++) {
+            JSONObject savestate = json.getJSONObject(i);
+            if (savestate.getString("name").equals(username)) {
+                String[] splitMessage = savestate.getString("message").split("\\s+");
+                words.addAll(Arrays.asList(splitMessage));
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i=0; i<5; i++) /**/ sb.append(words.get(rand.nextInt(words.size()))).append(' ');
+        return sb.toString().trim();
+    }
+    
+    public String markOf() {
+        return markOf("");
     }
 
     private String getSlot(BigInteger slot) {
@@ -122,14 +155,12 @@ public class JSONFileManipulator {
     }
     
     public String randomLoad(String username) {
-        String retMessage = "INIT";
+        JSONObject savestate;
         int slot = -1;
         JSONArray json = getJSON();
         if (username.isEmpty()) {
-            double random = Math.abs(Math.random()*json.length());
-            slot = ((int)random) % json.length();
-            retMessage = json.getJSONObject(slot).getString("message"); // mod just in case
-            username = json.getJSONObject(slot).getString("name");
+            slot = rand.nextInt(json.length());
+            savestate = json.getJSONObject(slot);
         } else {
             JSONArray userArray = new JSONArray();
             for(int i=0; i<json.length(); i++) {
@@ -138,11 +169,11 @@ public class JSONFileManipulator {
             }
             if (userArray.length() == 0)
                 return username + " doesn't have any savestates!!! O:";
-            double random = Math.abs(Math.random()*userArray.length());
-            slot = ((int)random) % userArray.length();
-            retMessage = userArray.getJSONObject(slot).getString("message"); // mod just in case
+            slot = rand.nextInt(userArray.length());
+            savestate = userArray.getJSONObject(slot);
+            
         }
-        return username + "[" + slot + "]: " + retMessage;
+        return username + "[" + savestate.getString("slot") + "]: " + savestate.getString("message");
     }
     
     public String randomLoad() {
