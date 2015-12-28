@@ -37,7 +37,15 @@ public class CommandParse {
             } else {
                 return jfm.saveSlot(slot.toString(), username, params[1]);
             }
-            
+        }
+        
+        if (invoke.equals("road")) {
+            if (command.length <= 1)
+                return jfm.randomLoad();
+            String[] params = command[1].trim().split("\\s+", 2);
+            if (!params[0].isEmpty())
+                return jfm.randomLoad(params[0]);
+            return "lmao tell savestate i broke (this is an error)";
         }
 
         return null;

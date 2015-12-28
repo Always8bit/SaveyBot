@@ -121,6 +121,34 @@ public class JSONFileManipulator {
         return "ur savestate was sav'd to slot " + slot.toString() + "! ^O^";
     }
     
+    public String randomLoad(String username) {
+        String retMessage = "INIT";
+        int slot = -1;
+        JSONArray json = getJSON();
+        if (username.isEmpty()) {
+            double random = Math.abs(Math.random()*json.length());
+            slot = ((int)random) % json.length();
+            retMessage = json.getJSONObject(slot).getString("message"); // mod just in case
+            username = json.getJSONObject(slot).getString("name");
+        } else {
+            JSONArray userArray = new JSONArray();
+            for(int i=0; i<json.length(); i++) {
+                if (json.getJSONObject(i).getString("name").equals(username))
+                    userArray.put(json.getJSONObject(i));
+            }
+            if (userArray.length() == 0)
+                return username + " doesn't have any savestates!!! O:";
+            double random = Math.abs(Math.random()*userArray.length());
+            slot = ((int)random) % userArray.length();
+            retMessage = userArray.getJSONObject(slot).getString("message"); // mod just in case
+        }
+        return username + "[" + slot + "]: " + retMessage;
+    }
+    
+    public String randomLoad() {
+        return randomLoad("");
+    }
+    
     /**
      * 
      * @return Returns a JSON Array of the JSON database
