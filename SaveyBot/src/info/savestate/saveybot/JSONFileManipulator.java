@@ -35,7 +35,7 @@ public class JSONFileManipulator {
     public String getSlot(String slotString, boolean largeResponse) {
         try {
             return getSlot( new BigInteger(slotString));
-        } catch (NumberFormatException nfe) {
+        } catch (Exception e) {
             // going to load all slots made by user.
         }
         JSONArray json = getJSON();
@@ -66,6 +66,29 @@ public class JSONFileManipulator {
             return "owha! " + slotString + " owns slot(s) " + slots.toString() + "!!!! :D :D :D/";
         }
         return slotString + " doesn't own any savestates!! (u should fix that !! O:)";
+    }
+    
+    public String remove(String slotString, String username) {
+        BigInteger slot = null;
+        try {
+            slot = new BigInteger(slotString);
+        } catch (Exception e) {
+            return "uh hhh h-- that's not a number??? lmao bye af";
+        }
+        JSONArray json = getJSON();
+        for (int i=0; i<json.length(); i++) {
+            JSONObject savestate = json.getJSONObject(i);
+            if (savestate.getString("slot").equals(slot.toString())) {
+                if (savestate.getString("name").equals(username)) {
+                    json.remove(i);
+                    writeJSON(json);
+                    return "rip ur msg )));";
+                } else {
+                    return "u can't do that! that savestate belongs to " + savestate.getString("name") + "! O:";
+                }
+            } 
+        }
+        return "savestate not found ! (u should make it!!!)";
     }
     
     public String markOf(String username) {
@@ -135,21 +158,32 @@ public class JSONFileManipulator {
         BigInteger slot;
         try {
             slot = new BigInteger(slotString);
-        } catch (NumberFormatException nfe) {
+        } catch (Exception e) {
             return "lmao bye af thats not a real number";
         }
         JSONArray json = getJSON();
+        int replaceIndex = -1;
         for (int i=0; i<json.length(); i++) {
             JSONObject o = json.getJSONObject(i);
             if (o == null) continue;
             BigInteger current = new BigInteger(o.getString("slot"));
-            if (current.equals(slot)) return "waohwo!!! " + o.getString("name") + " owns this savestate you dong !!";
+            if (current.equals(slot)) {
+                if (!o.getString("name").equals(username)) {
+                     return "waohwo!!! " + o.getString("name") + " owns this savestate you dong !!";
+                } else {
+                    replaceIndex = i;
+                    break;
+                }
+            }
         }
         JSONObject o = new JSONObject();
         o.put("name", username);
         o.put("slot", slot.toString());
         o.put("message", message);
-        json.put(o);
+        if (replaceIndex != -1) {
+            json.remove(replaceIndex);
+            json.put(replaceIndex, o);
+        } else json.put(o);
         writeJSON(json);
         return "ur savestate was sav'd to slot " + slot.toString() + "! ^O^";
     }

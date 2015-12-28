@@ -50,6 +50,11 @@ public class CommandParse {
                 return jfm.markOf(param);
         }
         
+        if (invoke.equals("remove")) {
+            String param = getParam(command);
+            return jfm.remove(param, username);
+        }
+        
         if (invoke.equals("road")) {
             if (command.length <= 1)
                 return jfm.randomLoad();
