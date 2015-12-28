@@ -1,6 +1,7 @@
 package info.savestate.saveybot;
 
 import java.io.IOException;
+import java.util.Arrays;
 import org.jibble.pircbot.*;
 
 /**
@@ -16,6 +17,7 @@ public class SaveyBot extends PircBot {
         configuration = new ConfigReader(configPath);
         jfm = new JSONFileManipulator(dbPath);
         setVerbose(true);
+        setMessageDelay(1251);
         setName (configuration.getParam("NAME")[0]);
         setLogin(configuration.getParam("NAME")[0]);
         try {
@@ -47,7 +49,24 @@ public class SaveyBot extends PircBot {
         String[] command = parseCommand(message);
         if (command != null) {
             String parsed = CommandParse.parseCommand(command, verbose, jfm, sender);
-            if (parsed != null) sendMessage(channel, "~ " + parsed);
+            if (parsed == null) return;
+            if (parsed.length() < 440) {
+                sendMessage(channel, "~ " + parsed);
+            } else {
+                int     splitIndex = 440;
+                int     SPLIT_AMT  = 440;
+                boolean msgProcessing = true;
+                char[]  msgFull  = parsed.toCharArray();
+                while (msgProcessing) {
+                    char[] msgSplit = Arrays.copyOfRange(msgFull, splitIndex-SPLIT_AMT, splitIndex);
+                    sendMessage(channel, "~ " + String.valueOf(msgSplit));
+                    splitIndex += SPLIT_AMT;
+                    if (splitIndex == msgFull.length + SPLIT_AMT)
+                        msgProcessing = false;
+                    if (splitIndex > msgFull.length)
+                        splitIndex = msgFull.length;
+                }
+            }
         }
     }
     
