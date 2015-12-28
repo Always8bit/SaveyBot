@@ -149,6 +149,10 @@ public class JSONFileManipulator {
         }
         return lowest.toString();
     }
+    
+    public String low() {
+        return "SaveyBot's lowest free slot is #" + lowestSlot() + "! wow !!! :D/";
+    }
 
     public String saveSlot(String username, String message) {    
         return saveSlot(lowestSlot(), username, message);
@@ -186,6 +190,24 @@ public class JSONFileManipulator {
         } else json.put(o);
         writeJSON(json);
         return "ur savestate was sav'd to slot " + slot.toString() + "! ^O^";
+    }
+    
+    public String whois(String slotString) {
+        BigInteger slot;
+        try {
+            slot = new BigInteger(slotString);
+        } catch (Exception e) {
+            return "idk what the wtf u were doing but " + slotString + " is NOT a number lmao.";
+        }
+        JSONArray json = getJSON();
+        for (int i=0; i<json.length(); i++) {
+            JSONObject savestate = json.getJSONObject(i);
+            if (savestate.getString("slot").equals(slot.toString()))
+                return "savestate " + savestate.getString("slot") + 
+                        " is owned by " + savestate.getString("name") +
+                        "!!! ^o^ ";
+        }
+        return "no one owns that savestate!!! (u should change that!)";
     }
     
     public String randomLoad(String username) {

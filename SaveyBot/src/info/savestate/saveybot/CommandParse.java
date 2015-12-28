@@ -32,7 +32,7 @@ public class CommandParse {
             } catch (Exception e) {
                 System.err.println("Not specificing a slot, saving to lowest free state...");
             }
-            if (slot == null) {
+            if (slot == null || command[1].split("\\s+").length == 1) {
                 return jfm.saveSlot(username, command[1]);
             } else {
                 return jfm.saveSlot(slot.toString(), username, getTextExcludingParam(command));
@@ -52,7 +52,22 @@ public class CommandParse {
         
         if (invoke.equals("remove")) {
             String param = getParam(command);
-            return jfm.remove(param, username);
+            if (param != null)
+                return jfm.remove(param, username);
+        }
+        
+        if (invoke.equals("whois")) {
+            String param = getParam(command);
+            if (param != null)
+                return jfm.whois(param);
+        }
+        
+        if (invoke.equals("low")) {
+            return jfm.low();
+        }
+        
+        if (invoke.equals("high")) {
+            return "(2^32)^Integer.MAX_VALUE";
         }
         
         if (invoke.equals("road")) {
