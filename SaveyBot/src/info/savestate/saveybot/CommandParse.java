@@ -72,7 +72,7 @@ public class CommandParse {
         
         if (invoke.equals("search")) {
             if (command.length == 2)
-                return jfm.search(command[1]);
+                return jfm.search(command[1], verbose);
         }
         
         if (invoke.equals("road")) {
