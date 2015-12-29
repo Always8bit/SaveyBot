@@ -16,6 +16,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.function.Consumer;
 import org.json.*;
 
 /**
@@ -93,6 +94,27 @@ public class JSONFileManipulator {
     
     public String size() {
         return "theres " + getJSON().length() + " savestates saved! holy wow! \\:D/";
+    }
+    
+    public String nameList(boolean largeResponse) {
+        JSONArray json = getJSON();
+        ArrayList<String> names = new ArrayList<>();
+        for (int i=0; i<json.length(); i++) {
+            JSONObject savestate = json.getJSONObject(i);
+            String name = savestate.getString("name");
+            if (!names.contains(name)) 
+                names.add(name);
+        }
+        if (largeResponse) {
+            StringBuilder sb = new StringBuilder();
+            names.stream().forEach((String name) -> {
+                sb.append(name).append(", ");
+            });
+            String returnString = sb.toString();
+            return "SaveyBot's personal dongs!! :D :D :D/ : " + returnString.substring(0, returnString.length()-2);
+        } else {
+            return "SaveyBot has " + names.size() + " personal dongs!! :D :D :D/";
+        }
     }
     
     public String markOf(String username) {
