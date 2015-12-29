@@ -83,6 +83,10 @@ public class CommandParse {
             return jfm.nameList(verbose);
         }
         
+        if (invoke.equals("log")) {
+            return jfm.log();
+        }
+        
         if (invoke.equals("road")) {
             if (command.length <= 1)
                 return jfm.randomLoad();

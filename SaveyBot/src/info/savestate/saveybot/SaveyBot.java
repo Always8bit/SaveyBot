@@ -13,9 +13,9 @@ public class SaveyBot extends PircBot {
     private final ConfigReader configuration;
     private final JSONFileManipulator jfm;
     
-    public SaveyBot(String configPath, String dbPath) throws IOException {
+    public SaveyBot(String configPath, String dbPath, String logPath) throws IOException {
         configuration = new ConfigReader(configPath);
-        jfm = new JSONFileManipulator(dbPath);
+        jfm = new JSONFileManipulator(dbPath, logPath);
         setVerbose(true);
         setMessageDelay(1251);
         setName (configuration.getParam("NAME")[0]);

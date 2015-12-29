@@ -16,6 +16,7 @@ public class Main {
     public static void main(String[] a) throws IOException {
         String configPath = "saveybot.cfg";
         String dbPath = "saveybot.json";
+        String logPath = "log.html";
         for (int i=0; i<a.length; i++) {
             // decode json 
             if (a[i].equals("--json")) {
@@ -26,8 +27,10 @@ public class Main {
                 configPath = a[++i];
             if (a[i].equals("--db"))
                 dbPath = a[++i];
+            if (a[i].equals("--log"))
+                logPath = a[++i];
         }
-        SaveyBot sb = new SaveyBot(configPath, dbPath);
+        SaveyBot sb = new SaveyBot(configPath, dbPath, logPath);
     }
     
     /**

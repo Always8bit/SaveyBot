@@ -13,8 +13,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
 import java.nio.charset.Charset;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Random;
 import java.util.function.Consumer;
 import org.json.*;
@@ -26,9 +29,11 @@ import org.json.*;
 public class JSONFileManipulator {
     
     private final String filename;
+    private final String logfile;
     private final Random rand;
     
-    public JSONFileManipulator(String filename) {
+    public JSONFileManipulator(String filename, String logfile) {
+        this.logfile = logfile;
         this.filename = filename;
         this.rand = new Random();
     }
@@ -67,6 +72,43 @@ public class JSONFileManipulator {
             return "owha! " + slotString + " owns slot(s) " + slots.toString() + "!!!! :D :D :D/";
         }
         return slotString + " doesn't own any savestates!! (u should fix that !! O:)";
+    }
+    
+    public String log() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<!DOCTYPE html>\n");
+        sb.append("<html>\n");
+        sb.append("    <head>\n");
+        sb.append("    <title>dongs!!!!</title>\n");
+        sb.append("    </head>\n");
+        sb.append("    <body>\n");
+        sb.append("        <h4>SaveyBot's Savestates!!! :D :D :D/</h4>\n");
+        sb.append("        <br />\n");
+        sb.append("        <table style='table-layout: fixed; width: 100%'><tbody class=\"list\">\n");
+        
+        JSONArray json = getJSON();
+        
+        for (int i=0; i<json.length(); i++) {
+            JSONObject savestate = json.getJSONObject(i);
+            sb.append("            <tr>\n");
+            sb.append("                <td class=\"slot\" style='word-wrap: break-word;'>").append(savestate.getString("slot")).append("</td>\n");
+            sb.append("                <td class=\"name\" style='word-wrap: break-word;'>").append(savestate.getString("name")).append("</td>\n");
+            sb.append("                <td class=\"message\" style='word-wrap: break-word;'>").append(savestate.getString("message")).append("</td>\n");
+            sb.append("            </tr>\n");
+        }
+        
+        sb.append("        </tbody></table>\n");
+        sb.append("    </body>\n");
+        sb.append("</html>\n");
+        sb.append("\n\n\n\n");
+        
+        DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
+        Date date = new Date();
+        sb.append("<!-- FILE GENERATED ON ").append(df.format(date)).append(" -->\n");
+        
+        writeLog(sb.toString());
+        
+        return "omg omggomg omg om TH ULTIMATE http://www.savestate.info/upload/log.html O: O: O: !"; 
     }
     
     public String remove(String slotString, String username) {
@@ -309,6 +351,18 @@ public class JSONFileManipulator {
             System.out.println("JSON database saved to " + filename);
         } catch (IOException e) {
             System.out.println("JSON database error.");
+        }
+    }
+    
+    private void writeLog(String logInfo) {
+        try {
+            byte[] logBytes = logInfo.getBytes(Charset.defaultCharset());
+            FileOutputStream fos = new FileOutputStream(logfile);
+            fos.write(logBytes);
+            fos.close();
+            System.out.println(".log saved to " + logfile);
+        } catch (IOException e) {
+            System.out.println(".log save error.");
         }
     }
     
