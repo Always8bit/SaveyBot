@@ -45,9 +45,16 @@ public class SaveyBot extends PircBot {
         
         String[] command = parseCommand(message);
         if (command != null) {
+            if (command.length > 0) {
+                if (command[0].length() > 0) {
+                    if (command[0].charAt(0) == '!')
+                        // dumb !this checking poop crap
+                        verbose = false;
+                }
+            }
             String parsed = CommandParse.parseCommand(command, verbose, jfm, sender);
             if (parsed == null) return;
-            if (parsed.length() < 440) {
+            if (parsed.length() < 440 || !verbose) {
                 sendMessage(channel, "~ " + parsed);
             } else {
                 int     splitIndex = 440;
@@ -68,17 +75,22 @@ public class SaveyBot extends PircBot {
     }
     
     private String[] parseCommand(String text) {
-        boolean invoke = false;
         for (String s : configuration.getParam("INVOKING")) {
-            if (s.charAt(0) == text.charAt(0))
-                invoke = true;
+            if (!(s.charAt(0) == text.charAt(0)))
+                continue;
+            text = text.trim();
+            String[] splitCommand = text.split("\\s+", 2);
+            if (splitCommand[0].length() <= 1) return null;
+            splitCommand[0] = splitCommand[0].substring(1);
+            return splitCommand;
         }
-        if (!invoke) return null;
-        text = text.trim();
-        String[] splitCommand = text.split("\\s+", 2);
-        if (splitCommand[0].length() <= 1) return null;
-        splitCommand[0] = splitCommand[0].substring(1);
-        return splitCommand;
+        if ('!' == text.charAt(0)) {
+            text = text.trim();
+            String[] splitCommand = text.split("\\s+", 2);
+            if (splitCommand[0].length() <= 1) return null;
+            return splitCommand;
+        }
+        return null;
     }
     
     public ConfigReader getConfig() {

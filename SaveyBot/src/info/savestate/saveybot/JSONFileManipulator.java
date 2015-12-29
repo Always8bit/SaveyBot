@@ -29,7 +29,7 @@ public class JSONFileManipulator {
     
     public JSONFileManipulator(String filename) {
         this.filename = filename;
-        this.rand = new Random('d' + 'o' + 'n' + 'g');
+        this.rand = new Random();
     }
     
     public String getSlot(String slotString, boolean largeResponse) {
@@ -89,6 +89,10 @@ public class JSONFileManipulator {
             } 
         }
         return "savestate not found ! (u should make it!!!)";
+    }
+    
+    public String size() {
+        return "theres " + getJSON().length() + " savestates saved! holy wow! \\:D/";
     }
     
     public String markOf(String username) {
@@ -234,6 +238,7 @@ public class JSONFileManipulator {
         if (username.isEmpty()) {
             slot = rand.nextInt(json.length());
             savestate = json.getJSONObject(slot);
+            username = json.getJSONObject(slot).getString("name");
         } else {
             JSONArray userArray = new JSONArray();
             for(int i=0; i<json.length(); i++) {
