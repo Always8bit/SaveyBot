@@ -46,7 +46,7 @@ public class Main {
                     + "                   \"saveybot.cfg\"\n"
                     + "      --db PATH    The location of the database. If\n"
                     + "                   not specified, defaults to \n"
-                    + "                   \"saveybot.db\"\n"
+                    + "                   \"saveybot.json\"\n"
                     + "     --log PATH    The location where the HTML log\n"
                     + "                   should be saved. If not specified,\n"
                     + "                   defaults to \"log.html\"\n");
