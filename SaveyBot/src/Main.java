@@ -30,7 +30,31 @@ public class Main {
             if (a[i].equals("--log"))
                 logPath = a[++i];
         }
-        SaveyBot sb = new SaveyBot(configPath, dbPath, logPath);
+        try {
+            SaveyBot sb = new SaveyBot(configPath, dbPath, logPath);
+        } catch (Exception e) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("\nUsage: SaveyBot.jar [--json] [--config PATH]\n"); 
+            sb.append("                    [--db PATH] [--log PATH]\n");
+            sb.append("\n");
+            sb.append("Options:\n");
+            sb.append("    --json         Activates the old database -> json\n"
+                    + "                   conversion tool. Shouldn't be of\n"
+                    + "                   any use to anyone but Savestate...\n"
+                    + "  --config PATH    The location of the configure file.\n"
+                    + "                   If not specified, defaults to\n"
+                    + "                   \"saveybot.cfg\"\n"
+                    + "      --db PATH    The location of the database. If\n"
+                    + "                   not specified, defaults to \n"
+                    + "                   \"saveybot.db\"\n"
+                    + "     --log PATH    The location where the HTML log\n"
+                    + "                   should be saved. If not specified,\n"
+                    + "                   defaults to \"log.html\"\n");
+            sb.append("\n"
+                    + " SaveyBot designed by Savestate\n"
+                    + " --> https://github.com/Always8bit/SaveyBot/");
+            System.out.println(sb.toString());
+        }
     }
     
     /**

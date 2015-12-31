@@ -108,7 +108,7 @@ public class JSONFileManipulator {
         
         writeLog(sb.toString());
         
-        return "omg omggomg omg om TH ULTIMATE http://www.savestate.info/upload/log.html O: O: O: !"; 
+        return "omg omggomg omg om TH ULTIMATE http://overcocked.penis.systems/log.html O: O: O: !"; 
     }
     
     public String remove(String slotString, String username) {
