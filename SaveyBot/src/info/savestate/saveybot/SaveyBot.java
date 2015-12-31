@@ -1,6 +1,7 @@
 package info.savestate.saveybot;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import org.jibble.pircbot.*;
 
@@ -12,25 +13,42 @@ public class SaveyBot extends PircBot {
     
     private final ConfigReader configuration;
     private final JSONFileManipulator jfm;
+    private final ArrayList<CircleTimer> floodTimers;
+    private final FloodProtection fp;
     
     public SaveyBot(String configPath, String dbPath, String logPath) throws IOException {
         configuration = new ConfigReader(configPath);
         jfm = new JSONFileManipulator(dbPath, logPath);
+        floodTimers = new ArrayList<>();
+        
         setVerbose(true);
         setMessageDelay(1251);
         setName (configuration.getParam("NAME")[0]);
         setLogin(configuration.getParam("NAME")[0]);
+        
+        int floodSize = Integer.parseInt(configuration.getParam("FLOOD")[0]);
+        int threshold = Integer.parseInt(configuration.getParam("FLOOD")[1]) * 60;
+        int leaveFor  = Integer.parseInt(configuration.getParam("FLOOD")[2]) * 60 ;
+        
         try {
             connect(configuration.getParam("SERVER")[0]);
         } catch (IrcException ex) {
             System.err.println("Could not connect to IRC Server!");
         }
+        
         for(String s : configuration.getParam("+CHAN")) {
             joinChannel(s);
         }
         for(String s : configuration.getParam("CHAN")) {
+            floodTimers.add(new CircleTimer(floodSize, threshold, leaveFor, s));
             joinChannel(s);
         }
+        
+        fp = new FloodProtection(this);
+    }
+    
+    public ArrayList<CircleTimer> getFloodTimers() {
+        return floodTimers;
     }
 
     @Override
@@ -54,6 +72,11 @@ public class SaveyBot extends PircBot {
             }
             String parsed = CommandParse.parseCommand(command, verbose, jfm, sender);
             if (parsed == null) return;
+            for (CircleTimer ct : floodTimers) {
+                if (channel.equals(ct.getChannel())) {
+                    ct.tick();
+                } 
+            }
             if (parsed.length() < 440 || !verbose) {
                 sendMessage(channel, "~ " + parsed);
             } else {
