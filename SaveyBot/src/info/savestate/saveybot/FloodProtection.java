@@ -18,7 +18,6 @@ public class FloodProtection {
     public FloodProtection(SaveyBot sb) {
         Runnable floodProtection = () -> {
             for (CircleTimer ct : sb.getFloodTimers()) {
-                System.out.println(ct);
                 if (ct.tooQuick() && (ct.inChannel == true)) {
                     sb.partChannel(ct.getChannel(), "go to #savespam dongs!!!");
                     ct.inChannel = false;

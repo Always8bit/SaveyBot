@@ -44,6 +44,15 @@ public class SaveyBot extends PircBot {
             joinChannel(s);
         }
         
+        String[] login = configuration.getParam("LOGIN");
+        if (login != null) {
+            if (login.length == 4) {
+                this.sendMessage(login[0], login[1] + " " 
+                                         + login[2] + " " 
+                                         + login[3]);
+            }
+        }
+        
         fp = new FloodProtection(this);
     }
     
