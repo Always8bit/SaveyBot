@@ -87,6 +87,14 @@ public class CommandParse {
             return jfm.log();
         }
         
+        if (invoke.equals("source")) {
+            return "https://github.com/Always8bit/SaveyBot/";
+        }
+        
+        if (invoke.equals("json")) {
+            return "http://overcocked.penis.systems/saveybot.json";
+        }
+        
         if (invoke.equals("road")) {
             if (command.length <= 1)
                 return jfm.randomLoad();
