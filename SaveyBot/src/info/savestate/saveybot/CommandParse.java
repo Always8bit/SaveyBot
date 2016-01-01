@@ -110,6 +110,11 @@ public class CommandParse {
             if (param == null)
                 return DEFAULT_PENIS;
             try {
+                BigInteger bi = new BigInteger(param);
+                if (bi.compareTo(new BigInteger("2000")) == 1)
+                    param = "2000";
+                if (bi.compareTo(new BigInteger("-2000")) == -1)
+                    param = "-2000";
                 int size = Integer.parseInt(param);
                 StringBuilder sb = new StringBuilder();
                 char begin;
