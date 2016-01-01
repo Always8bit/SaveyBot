@@ -40,7 +40,7 @@ public class CommandParse {
         }
         
         if (invoke.equals("help"))
-            return "lol u n00b (^: http://savestate.info/upload/IRCHelp.png";
+            return "lol u n00b (^: http://overcocked.penis.systems/commands.html";
 
         if (invoke.equals("markov") || invoke.equals("markof")) {
             if (command.length <= 1)
