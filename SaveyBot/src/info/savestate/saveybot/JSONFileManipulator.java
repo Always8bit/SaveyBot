@@ -5,21 +5,21 @@
  */
 package info.savestate.saveybot;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.math.BigInteger;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Random;
-import java.util.function.Consumer;
 import org.json.*;
 
 /**
@@ -112,7 +112,7 @@ public class JSONFileManipulator {
     }
     
     public String remove(String slotString, String username) {
-        BigInteger slot = null;
+        BigInteger slot;
         try {
             slot = new BigInteger(slotString);
         } catch (Exception e) {
@@ -297,7 +297,7 @@ public class JSONFileManipulator {
     
     public String randomLoad(String username) {
         JSONObject savestate;
-        int slot = -1;
+        int slot;
         JSONArray json = getJSON();
         if (username.isEmpty()) {
             slot = rand.nextInt(json.length());
@@ -327,15 +327,20 @@ public class JSONFileManipulator {
      * @return Returns a JSON Array of the JSON database
      */
     private JSONArray getJSON() {
-        File file = new File(filename);
-        InputStream stream;
         try {
-            stream = new FileInputStream(file);
-        } catch (FileNotFoundException ex) {
-            stream = null;
+            File file = new File(filename);
+            InputStream is = new FileInputStream(file);
+            BufferedReader in = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while((line = in.readLine()) != null)
+                sb.append(line).append("\n");
+            JSONTokener tokenizer = new JSONTokener(sb.toString());
+            return new JSONArray(tokenizer);
         }
-        JSONTokener tokenizer = new JSONTokener(stream);
-        return new JSONArray(tokenizer);
+        catch (IOException | JSONException e) {
+            return null;
+        }
     }
     
     /**
@@ -344,7 +349,7 @@ public class JSONFileManipulator {
     private void writeJSON(JSONArray json) {
         try {
             String jsonString = json.toString(1);
-            byte[] jsonBytes = jsonString.getBytes(Charset.defaultCharset());
+            byte[] jsonBytes = jsonString.getBytes(StandardCharsets.UTF_8);
             FileOutputStream fos = new FileOutputStream(filename);
             fos.write(jsonBytes);
             fos.close();
@@ -356,7 +361,7 @@ public class JSONFileManipulator {
     
     private void writeLog(String logInfo) {
         try {
-            byte[] logBytes = logInfo.getBytes(Charset.defaultCharset());
+            byte[] logBytes = logInfo.getBytes(StandardCharsets.UTF_8);
             FileOutputStream fos = new FileOutputStream(logfile);
             fos.write(logBytes);
             fos.close();

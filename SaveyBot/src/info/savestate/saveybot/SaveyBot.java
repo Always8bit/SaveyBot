@@ -23,6 +23,7 @@ public class SaveyBot extends PircBot {
         
         setVerbose(true);
         setMessageDelay(1251);
+        setEncoding("UTF-8");
         setName (configuration.getParam("NAME")[0]);
         setLogin(configuration.getParam("NAME")[0]);
         
