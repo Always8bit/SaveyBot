@@ -22,7 +22,7 @@ public class SaveyBot extends PircBot {
         floodTimers = new ArrayList<>();
         
         setVerbose(true);
-        setMessageDelay(1251);
+        setMessageDelay(Integer.parseInt(configuration.getParam("MS_DELAY")[0]));
         setEncoding("UTF-8");
         setName (configuration.getParam("NAME")[0]);
         setLogin(configuration.getParam("NAME")[0]);
