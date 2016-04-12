@@ -50,7 +50,7 @@ public class JSONFileManipulator {
             for (int i=0; i<json.length(); i++) {
                 JSONObject o = json.getJSONObject(i);
                 if (o == null) continue;
-                if (o.getString("name").equals(slotString)) entries++;
+                if (o.getString("name").toLowerCase().equals(slotString.toLowerCase())) entries++;
             } 
             if (entries > 0)
                 return slotString + " owns " + entries + " savestates!!! :D/";
@@ -61,7 +61,7 @@ public class JSONFileManipulator {
         for (int i=0; i<json.length(); i++) {
             JSONObject o = json.getJSONObject(i);
             if (o == null) continue;
-            if (o.getString("name").equals(slotString)) {
+            if (o.getString("name").toLowerCase().equals(slotString.toLowerCase())) {
                 entries++;
                 slots.append(o.getString("slot")).append(", ");
             }
@@ -160,6 +160,7 @@ public class JSONFileManipulator {
     }
     
     public String markOf(String username) {
+        username = username.trim();
         JSONArray json = getJSON();
         ArrayList<String> words = new ArrayList<>();
         if (username.isEmpty()) {
@@ -173,7 +174,7 @@ public class JSONFileManipulator {
         }
         for (int i=0; i<json.length(); i++) {
             JSONObject savestate = json.getJSONObject(i);
-            if (savestate.getString("name").equals(username)) {
+            if (savestate.getString("name").toLowerCase().equals(username.toLowerCase())) {
                 String[] splitMessage = savestate.getString("message").split("\\s+");
                 words.addAll(Arrays.asList(splitMessage));
             }
@@ -223,6 +224,10 @@ public class JSONFileManipulator {
     }
 
     public String search(String term, boolean largeResponse) {
+        int MIN_SEARCH_SIZE = 4;
+        if (!(term.length() >= MIN_SEARCH_SIZE)) {
+            return "\"" + term +  "\" is 2 small !! gotta add " + (MIN_SEARCH_SIZE-term.length()) + " more chars d;";
+        }
         JSONArray json = getJSON(); 
         StringBuilder sb = new StringBuilder();
         int size = 0;
@@ -306,7 +311,7 @@ public class JSONFileManipulator {
         } else {
             JSONArray userArray = new JSONArray();
             for(int i=0; i<json.length(); i++) {
-                if (json.getJSONObject(i).getString("name").equals(username))
+                if (json.getJSONObject(i).getString("name").toLowerCase().equals(username.toLowerCase()))
                     userArray.put(json.getJSONObject(i));
             }
             if (userArray.length() == 0)
