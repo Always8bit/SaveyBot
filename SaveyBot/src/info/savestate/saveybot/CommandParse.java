@@ -75,6 +75,11 @@ public class CommandParse {
                 return jfm.search(command[1], verbose);
         }
         
+        if (invoke.equals("chain")) {
+            if (command.length == 2)
+                return jfm.chain(command[1], verbose);
+        }
+        
         if (invoke.equals("size")) {
             return jfm.size();
         }
