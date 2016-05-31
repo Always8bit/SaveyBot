@@ -224,7 +224,7 @@ public class JSONFileManipulator {
     }
 
     public String search(String term, boolean largeResponse) {
-        int MIN_SEARCH_SIZE = 4;
+        int MIN_SEARCH_SIZE = 3;
         if (!(term.length() >= MIN_SEARCH_SIZE)) {
             return "\"" + term +  "\" is 2 small !! gotta add " + (MIN_SEARCH_SIZE-term.length()) + " more chars d;";
         }
