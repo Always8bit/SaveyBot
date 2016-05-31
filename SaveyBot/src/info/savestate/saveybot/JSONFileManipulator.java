@@ -243,6 +243,65 @@ public class JSONFileManipulator {
         if (largeResponse) return term + ": " + sb.toString().substring(0, sb.toString().length()-2);
         else return term + ": " + size + " resluts found !!! (go 2 #savespam 2 view em !)";
     }
+    
+    public String saveLaugh() {
+        // a near copy paste from the old saveybot
+        // that is why this is exceptionally ugly java
+        // instead of regularly ughly javah
+        int n;
+        int n2;
+        String string2 = "";
+        String string3 = "";
+        int n3;
+        int n4;
+        for (n = 0; n < 6; ++n) {
+            n3 = new Random().nextInt((10 - 0) + 1) + 0;
+            if (n3 >= 0 && n3 < 4) {
+                string3 = "H";
+            }
+            if (n3 >= 4 && n3 < 8) {
+                string3 = "A";
+            }
+            if (n3 == 9) {
+                string3 = "h";
+            }
+            if (n3 == 10) {
+                string3 = "a";
+            }
+            for (n2 = 0; n2 < n; ++n2) {
+                string2 = string2 + string3;
+            }
+        }
+        for (n = 0; n < 40; ++n) {
+            n3 = new Random().nextInt((2 - 0) + 1) + 0;
+            for (n2 = 0; n2 < n3; ++n2) {
+                int n5;
+                n4 = new Random().nextInt((3 - 0) + 1) + 0;
+                if (n4 == 0) {
+                    string3 = "H";
+                }
+                if (n4 == 1) {
+                    string3 = "A";
+                }
+                if (n4 == 2) {
+                    string3 = "h";
+                }
+                if (n4 == 3) {
+                    string3 = "a";
+                }
+                if ((n5 = new Random().nextInt((1500 - 0) + 1) + 0) == 616) {
+                    string3 = "P";
+                    n2 = n3;
+                }
+                if ((n5 =  new Random().nextInt((100000 - 0) + 1) + 0) == 44231) {
+                    string3 = "imGonnaKillYouYouFuckingBitch";
+                    n2 = n3;
+                }
+                string2 = string2 + string3;
+            }
+        }
+        return string2;
+    }
             
     public String saveSlot(String username, String message) {    
         return saveSlot(lowestSlot(), username, message);

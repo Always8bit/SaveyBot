@@ -56,6 +56,10 @@ public class CommandParse {
                 return jfm.remove(param, username);
         }
         
+        if (invoke.equals("savelaugh")) {
+            return jfm.saveLaugh();
+        }
+        
         if (invoke.equals("whois")) {
             String param = getParam(command);
             if (param != null)
