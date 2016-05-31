@@ -375,8 +375,68 @@ public class JSONFileManipulator {
             System.out.println(".log save error.");
         }
     }
+    
+    public String chainall(boolean verbose) {
+        return chainall(verbose, -1);
+    }
+    
+    public String chainall(boolean verbose, int sentenceSize) {
+        JSONArray json = getJSON();
+        ArrayList<String> words = new ArrayList<>();
+        for (int i=0; i<json.length(); i++) {
+            JSONObject savestate = json.getJSONObject(i);
+            String[] splitMessage = savestate.getString("message").split("\\s+");
+            words.addAll(Arrays.asList(splitMessage));
+        }
+        if (words.isEmpty()) {
+            return "lmao WTF this ERROR should never happen!!! (ZERO SAVESTATES ??? WTF)";
+        }
+        StringBuilder sb = new StringBuilder();
+        // all words are in "words"
+        // pick a word out at random!
+        int wordIndex = (int)(Math.random()*words.size());
+        if (sentenceSize <= 0) 
+            sentenceSize = ((int)(Math.random()*12))+3;
+        if (sentenceSize > 25) sentenceSize = 25;
+        
+        for (int i=0; i<sentenceSize; i++) {
+            // get current word
+            sb.append(words.get(wordIndex)).append(' ');
+            // 40% chance we'll stay on the same sentence.
+            if (Math.random() > 0.40) {
+                // different sentence
+                // make an array of all the .toLowerCase() matches of the current word
+                ArrayList<Integer> wordIndexes = new ArrayList<>();
+                for (int j=0; j<words.size(); j++) {
+                    if (words.get(j).equalsIgnoreCase(words.get(wordIndex)))
+                        wordIndexes.add(j);
+                }
+                // we have all the word indexes in wordIndexes
+                // ... if there are none, we'll just follow the current word (since it'll match)
+                int sameWordIndex = (int)(Math.random()*wordIndexes.size());
+                wordIndex = wordIndexes.get(sameWordIndex) + 1;
+            } else {
+                wordIndex++;
+            }
+            if (wordIndex >= words.size()) {
+                // in case we go over!!!
+                // new random number
+                wordIndex = (int)(Math.random()*words.size());
+            }
+        }
+        return sb.toString();        
+    }
+    
+    public String chain(String command, boolean verbose) {
+        String[] words = command.split("\\s+");
+        try {
+            return chain(words[0], verbose, Integer.parseInt(words[1]));
+        } catch (Exception e) {
+            return chain(command, verbose, -1);            
+        }
+    }
 
-    String chain(String username, boolean verbose) {
+    public String chain(String username, boolean verbose, int sentenceSize) {
         username = username.trim();
         JSONArray json = getJSON();
         ArrayList<String> words = new ArrayList<>();
@@ -394,8 +454,9 @@ public class JSONFileManipulator {
         // all words are in "words"
         // pick a word out at random!
         int wordIndex = (int)(Math.random()*words.size());
-        int sentenceSize = ((int)(Math.random()*6))+5;
-        
+        if (sentenceSize <= 0)
+            sentenceSize = ((int)(Math.random()*6))+5;  
+        if (sentenceSize > 25) sentenceSize = 25;
         for (int i=0; i<sentenceSize; i++) {
             // get current word
             sb.append(words.get(wordIndex)).append(' ');

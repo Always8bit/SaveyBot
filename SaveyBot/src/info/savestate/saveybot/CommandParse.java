@@ -76,8 +76,11 @@ public class CommandParse {
         }
         
         if (invoke.equals("chain")) {
+            if (command.length == 1)
+                return jfm.chainall(verbose);
             if (command.length == 2)
                 return jfm.chain(command[1], verbose);
+            return "lmao the command was parsed REALLY badly. (tell savestate)";
         }
         
         if (invoke.equals("size")) {
