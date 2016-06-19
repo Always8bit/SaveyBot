@@ -434,7 +434,7 @@ public class JSONFileManipulator {
             System.out.println(".log save error.");
         }
     }
-    
+    /*
     public String chainall(boolean verbose) {
         return chainall(verbose, -1);
     }
@@ -543,5 +543,6 @@ public class JSONFileManipulator {
         }
         return sb.toString();
     }
+    */
     
 }
