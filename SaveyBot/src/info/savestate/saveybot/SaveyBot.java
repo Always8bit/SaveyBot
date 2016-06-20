@@ -88,22 +88,21 @@ public class SaveyBot extends PircBot {
                 } 
             }
             String prepend = "~ ";
-            int msgMaxLength = 448 - configuration.getParam("NAME")[0].trim().length() - prepend.length();
+            int msgMaxLength = 448 - configuration.getParam("NAME")[0].length() - prepend.length();
             if (parsed.length() < msgMaxLength || !verbose) {
                 sendMessage(channel, prepend.concat(parsed));
             } else {
-                int     splitIndex = msgMaxLength;
-                int     SPLIT_AMT  = msgMaxLength;
-                boolean msgProcessing = true;
-                char[]  msgFull  = parsed.toCharArray();
-                while (msgProcessing) {
-                    char[] msgSplit = Arrays.copyOfRange(msgFull, splitIndex-SPLIT_AMT, splitIndex);
-                    sendMessage(channel, prepend.concat(String.valueOf(msgSplit)));
-                    splitIndex += SPLIT_AMT;
-                    if (splitIndex == msgFull.length + SPLIT_AMT)
-                        msgProcessing = false;
-                    if (splitIndex > msgFull.length)
-                        splitIndex = msgFull.length;
+                int offset = 0;
+                while(true) {
+                    try {
+                        sendMessage(channel, prepend.concat(
+                                                parsed.substring(offset, offset+msgMaxLength)
+                                             ));
+                        offset += msgMaxLength;
+                    } catch (Exception e) {
+                        sendMessage(channel, prepend.concat(parsed.substring(offset)));
+                        break;
+                    }
                 }
             }
         }
