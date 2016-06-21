@@ -1,6 +1,7 @@
 package info.savestate.saveybot;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import org.jibble.pircbot.*;
@@ -71,6 +72,63 @@ public class SaveyBot extends PircBot {
                 verbose = false;
         }
         
+        if (message.toLowerCase().startsWith("!this")) {
+            String THISMessage = message.toLowerCase().trim();
+            // special !this checking pre-command parsing
+            final String DEFAULT_PENIS = "8===============D";            
+            if (THISMessage.equals("!this")) { 
+                sendMessage(channel, DEFAULT_PENIS); 
+                for (CircleTimer ct : floodTimers) {
+                    if (channel.equals(ct.getChannel())) {
+                        ct.tick();
+                    } 
+                }
+                return;
+            }
+            BigInteger size;
+            int actualSize = 0;
+            try {
+                String sizeParam = THISMessage.split("\\s+", 2)[1];
+                size = new BigInteger(sizeParam);
+                if (size.compareTo(new BigInteger("-2000")) == -1) {
+                    actualSize = -2000;
+                } else if (size.compareTo(new BigInteger("2000")) == 1) {
+                    actualSize = 2000;
+                } else {
+                    actualSize = Integer.parseInt(sizeParam);
+                }
+            } catch (Exception e) {
+                sendMessage(channel, DEFAULT_PENIS); 
+                for (CircleTimer ct : floodTimers) {
+                    if (channel.equals(ct.getChannel())) {
+                        ct.tick();
+                    } 
+                }
+                return;
+            }
+            StringBuilder sb = new StringBuilder();
+            char begin;
+            char end;
+            if (actualSize < 0) {
+                begin = 'D';
+                end = '8';
+            } else {
+                begin = '8';
+                end = 'D';
+            }
+            sb.append(begin);
+            actualSize = Math.abs(actualSize);
+            for (int i=0; i<actualSize; i++) sb.append('=');
+            sb.append(end);
+            sendMessage(channel, sb.toString());
+            for (CircleTimer ct : floodTimers) {
+                if (channel.equals(ct.getChannel())) {
+                    ct.tick();
+                } 
+            }
+            return;
+        }
+        
         String[] command = parseCommand(message);
         if (command != null) {
             if (command.length > 0) {
@@ -80,6 +138,7 @@ public class SaveyBot extends PircBot {
                         verbose = false;
                 }
             }
+            
             String parsed = CommandParse.parseCommand(command, verbose, jfm, sender);
             if (parsed == null) return;
             for (CircleTimer ct : floodTimers) {

@@ -116,38 +116,6 @@ public class CommandParse {
             return "lmao tell savestate i broke (this is an error)";
         }
         
-        if (invoke.equals("!this")) {
-            final String DEFAULT_PENIS = "8===============D";
-            String param = getParam(command);
-            if (param == null)
-                return DEFAULT_PENIS;
-            try {
-                BigInteger bi = new BigInteger(param);
-                if (bi.compareTo(new BigInteger("2000")) == 1)
-                    param = "2000";
-                if (bi.compareTo(new BigInteger("-2000")) == -1)
-                    param = "-2000";
-                int size = Integer.parseInt(param);
-                StringBuilder sb = new StringBuilder();
-                char begin;
-                char end;
-                if (size < 0) {
-                    begin = 'D';
-                    end = '8';
-                } else {
-                    begin = '8';
-                    end = 'D';
-                }
-                sb.append(begin);
-                size = Math.abs(size);
-                for (int i=0; i<size; i++) sb.append('=');
-                sb.append(end);
-                return sb.toString();
-            } catch (Exception e) {
-                return DEFAULT_PENIS;
-            }
-        }
-        
         return null;
     }
     
