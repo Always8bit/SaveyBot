@@ -159,33 +159,77 @@ public class JSONFileManipulator {
         }
     }
     
-    public String markOf(String username) {
+    public String markOfAll(int sentenceSize) {
+        JSONArray json = getJSON();
+        ArrayList<String> words = new ArrayList<>();
+        
+        if (sentenceSize <= 0)
+            sentenceSize = ((int)(Math.random()*6))+5;  
+        if (sentenceSize > 50) sentenceSize = 50;
+        
+        for (int i=0; i<json.length(); i++) {
+            JSONObject savestate = json.getJSONObject(i);
+            String[] splitMessage = savestate.getString("message").split("\\s+");
+            words.addAll(Arrays.asList(splitMessage));
+        }
+        if (words.isEmpty()) {
+            return "lmao WTF this ERROR should never happen!!! (ZERO SAVESTATES ??? WTF)";
+        }
+        
+        StringBuilder sb = new StringBuilder();
+        for (int i=0; i<sentenceSize; i++) /**/ sb.append(words.get(rand.nextInt(words.size()))).append(' ');
+        return sb.toString().trim();
+    }
+    
+    public String markOf(String username, int sentenceSize) {
         username = username.trim();
         JSONArray json = getJSON();
         ArrayList<String> words = new ArrayList<>();
-        if (username.isEmpty()) {
-            for (int i=0; i<json.length(); i++) {
-                String[] splitMessage = json.getJSONObject(i).getString("message").split("\\s+");
-                words.addAll(Arrays.asList(splitMessage));
-            }
-            StringBuilder sb = new StringBuilder();
-            for (int i=0; i<6; i++) /**/ sb.append(words.get(rand.nextInt(words.size()))).append(' ');
-            return sb.toString().trim();
-        }
+        
+        if (sentenceSize <= 0)
+            sentenceSize = ((int)(Math.random()*6))+5;  
+        if (sentenceSize > 50) sentenceSize = 50;
+        
         for (int i=0; i<json.length(); i++) {
             JSONObject savestate = json.getJSONObject(i);
             if (savestate.getString("name").toLowerCase().equals(username.toLowerCase())) {
                 String[] splitMessage = savestate.getString("message").split("\\s+");
                 words.addAll(Arrays.asList(splitMessage));
             }
+        
         }
+        
+        if (words.isEmpty()) {
+            return "helo there that person SUCKS for not having any SAVESTATES O:<";
+        }
+        
         StringBuilder sb = new StringBuilder();
-        for (int i=0; i<5; i++) /**/ sb.append(words.get(rand.nextInt(words.size()))).append(' ');
+        for (int i=0; i<sentenceSize; i++) /**/ sb.append(words.get(rand.nextInt(words.size()))).append(' ');
         return sb.toString().trim();
     }
     
-    public String markOf() {
-        return markOf("");
+    public String markOf(String command) {
+        if (command.length() == 0) {
+            return markOfAll(-1);
+        }
+        else {
+            String[] words = command.split("\\s+");
+            
+            if (words.length == 1)  {
+                try {
+                    return markOfAll(Integer.parseInt(words[0]));
+                } catch (Exception e) {
+                    return markOf(words[0], -1);
+                }
+            }
+            else {
+                try {
+                    return markOf(words[0], Integer.parseInt(words[1]));
+                } catch (Exception e) {
+                    return markOf(words[0], -1);
+                }
+            }
+        }
     }
 
     private String getSlot(BigInteger slot) {
@@ -434,7 +478,7 @@ public class JSONFileManipulator {
             System.out.println(".log save error.");
         }
     }
-    /*
+    
     public String chainall(boolean verbose) {
         return chainall(verbose, -1);
     }
@@ -456,7 +500,7 @@ public class JSONFileManipulator {
         int wordIndex = (int)(Math.random()*words.size());
         if (sentenceSize <= 0) 
             sentenceSize = ((int)(Math.random()*12))+3;
-        if (sentenceSize > 25) sentenceSize = 25;
+        if (sentenceSize > 50) sentenceSize = 50;
         
         for (int i=0; i<sentenceSize; i++) {
             // get current word
@@ -488,10 +532,19 @@ public class JSONFileManipulator {
     
     public String chain(String command, boolean verbose) {
         String[] words = command.split("\\s+");
-        try {
-            return chain(words[0], verbose, Integer.parseInt(words[1]));
-        } catch (Exception e) {
-            return chain(command, verbose, -1);            
+        if (words.length == 1)  {
+            try {
+                return markOfAll(Integer.parseInt(words[0]));
+            } catch (Exception e) {
+                return markOf(words[0], -1);
+            }
+        }
+        else {
+            try {
+                return chain(words[0], verbose, Integer.parseInt(words[1]));
+            } catch (Exception e) {
+                return chain(words[0], verbose, -1);
+            }
         }
     }
 
@@ -515,7 +568,7 @@ public class JSONFileManipulator {
         int wordIndex = (int)(Math.random()*words.size());
         if (sentenceSize <= 0)
             sentenceSize = ((int)(Math.random()*6))+5;  
-        if (sentenceSize > 25) sentenceSize = 25;
+        if (sentenceSize > 50) sentenceSize = 50;
         for (int i=0; i<sentenceSize; i++) {
             // get current word
             sb.append(words.get(wordIndex)).append(' ');
@@ -543,6 +596,4 @@ public class JSONFileManipulator {
         }
         return sb.toString();
     }
-    */
-    
 }

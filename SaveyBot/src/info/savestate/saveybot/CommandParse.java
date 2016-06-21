@@ -13,7 +13,7 @@ import java.math.BigInteger;
  */
 public class CommandParse {
     
-    public static String parseCommand(String[] command, boolean verbose, JSONFileManipulator jfm, String username) {
+    public static String parseCommand(String[] command, boolean verbose, JSONFileManipulator jfm, String username, String channel) {
         
         String invoke = command[0].toLowerCase();
         
@@ -43,11 +43,12 @@ public class CommandParse {
             return "lol u n00b (^: http://overcocked.penis.systems/commands.html";
 
         if (invoke.equals("markov") || invoke.equals("markof")) {
-            if (command.length <= 1)
-                return jfm.markOf();
-            String param = getParam(command);
-            if (param != null)
-                return jfm.markOf(param);
+            try {
+                return jfm.markOf(command[1]);
+            }
+            catch (Exception e) {
+                return jfm.markOf("");
+            }
         }
         
         if (invoke.equals("remove")) {
@@ -78,15 +79,20 @@ public class CommandParse {
             if (command.length == 2)
                 return jfm.search(command[1], verbose);
         }
-        /*
+        
         if (invoke.equals("chain")) {
-            if (command.length == 1)
-                return jfm.chainall(verbose);
-            if (command.length == 2)
-                return jfm.chain(command[1], verbose);
-            return "lmao the command was parsed REALLY badly. (tell savestate)";
+            if (channel.equals("#chainspam")) {
+                if (command.length == 1)
+                    return jfm.chainall(verbose);
+                if (command.length == 2)
+                    return jfm.chain(command[1], verbose);
+                return "lmao the command was parsed REALLY badly. (tell savestate)";
+            }
+            else {
+                return "go to #chainspam u dong!!! O:<";
+            }
         }
-        */
+        
         if (invoke.equals("size")) {
             return jfm.size();
         }
