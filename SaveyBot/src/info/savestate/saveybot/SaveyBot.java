@@ -138,7 +138,7 @@ public class SaveyBot extends PircBot {
                 }
             }
             
-            String parsed = CommandParse.parseCommand(command, verbose, jfm, sender);
+            String parsed = CommandParse.parseCommand(command, verbose, jfm, sender, channel);
             if (parsed == null) return;
             for (CircleTimer ct : floodTimers) {
                 if (channel.equals(ct.getChannel())) {
